@@ -2,14 +2,14 @@ import { Button, Label, TextInput } from "flowbite-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../services/api";
-
+import Loader from "./Loader"
 function SignupPage() {
   const navigate = useNavigate();
   const [signupData, setSignupData] = useState({
     username: "",
     password: "",
   });
-
+  const [loading, setLoading] = useState(false)
 
   const onChangeHandler = (e) => {
     setSignupData({ ...signupData, [e.target.id]: e.target.value });
@@ -17,14 +17,16 @@ function SignupPage() {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true)
     if (signupData.username && signupData.password) {
       let data = await registerUser(signupData);
+      setLoading(false)
       if (data.status === 201) {
         navigate("/login");
       }
     }
   }
-  return (
+  return (loading?<Loader/>:
     <div className="flex h-dvh justify-center items-center">
       <form className="flex w-full   max-w-md flex-col gap-4" onSubmit={(e) => onSubmitHandler(e)}>
         <h1 className="text-center text-2xl">Signup Page</h1>

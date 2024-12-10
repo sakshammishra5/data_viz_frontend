@@ -6,12 +6,13 @@ import { AppContext } from "../context/AppContext";
 
 
 function LoginPage() {
-  const {  setIsAuth } = useContext(AppContext)
+  const { setIsAuth } = useContext(AppContext)
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false)
 
 
   const onChangeHandler = (e) => {
@@ -19,15 +20,17 @@ function LoginPage() {
   }
 
   const onSubmitHandler = async (e) => {
+    setLoading(true)
     e.preventDefault();
     if (loginData.username && loginData.password) {
       let data = await loginUser(loginData)
+      setLoading(false)
       if (data.status === 200) {
         let resData = await data.json()
-        if(resData.token){
+        if (resData.token) {
           setIsAuth(true)
           localStorage.setItem("token", JSON.stringify(resData.token))
-           navigate("/");
+          navigate("/");
         }
       }
     }
