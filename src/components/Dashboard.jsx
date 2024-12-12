@@ -4,21 +4,24 @@ import GenderSelector from './GenderSelector'
 import AgeSelector from './AgeSelector'
 import BarChartComponent from './BarChartComponent'
 import LineChartComponent from './LineChartComponent'
+import UrlParamsUpdater from './UrlParamsUpdater'
 
 
 const Dashboard = () => {
+ 
   return (
     <>
-    <div>
-    <h1 className='text-center text-2xl'>DashBoard</h1>
-    <div className='flex justify-center h-10 gap-4'>
-      <Calander/>
-      <GenderSelector/>
-      <AgeSelector/>
-    </div>
-      <BarChartComponent/>
-      <LineChartComponent/>
-    </div>
+    <UrlParamsUpdater/>
+      <div>
+        <h1 className='text-center text-2xl'>DashBoard</h1>
+        <div className='flex justify-center h-10 gap-4'>
+          <Calander />
+          <GenderSelector />
+          <AgeSelector />
+        </div>
+        <BarChartComponent />
+        <LineChartComponent />
+      </div>
     </>
   )
 }
