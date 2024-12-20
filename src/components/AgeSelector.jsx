@@ -1,18 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AppContext} from '../context/AppContext';
+import { AppContext } from '../context/AppContext';
 const AgeSelector = () => {
-     const { age, setAge,chartData,setChartData } = useContext(AppContext)
+    const { age, setAge, chartData, setChartData,gender } = useContext(AppContext)
 
-    const onChange = (e) => {
+    const onChange =(e) => {
         setAge(e.target.value)
+        // if(localStorage.getItem('filters'))
+        // oldInfo=JSON.parse(localStorage.getItem('filters'))
+        let stringifiedAge = JSON.stringify({age:e.target.value,gender})
+        localStorage.setItem('filters',stringifiedAge)
     }
 
-    useEffect(()=>{
-        if(chartData!==null)
-        setChartData(prev=>{
-            prev.filter((item)=>item.Age==age)
-        })
-    },[age])
+    useEffect(() => {
+        if (chartData !== null && Array.isArray(chartData) && chartData.length > 0)
+            setChartData(chartData.filter((item) => item.Age == age))
+    }, [age])
 
     return (
         <select

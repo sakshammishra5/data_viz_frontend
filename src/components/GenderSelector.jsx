@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AppContext} from '../context/AppContext';
 
 const GenderSelector = () => {
-    const {gender,setGender ,chartData,setChartData}=useContext(AppContext)
+    const {gender,setGender ,chartData,setChartData,age}=useContext(AppContext)
     const onChange = (e) => {
         setGender(e.target.value)
+        let stringifiedGender=JSON.stringify({gender:e.target.value,age})
+        localStorage.setItem('filters',stringifiedGender)
     }
 
     useEffect(()=>{

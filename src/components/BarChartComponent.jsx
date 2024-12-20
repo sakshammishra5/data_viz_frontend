@@ -3,13 +3,13 @@ import { AppContext } from '../context/AppContext'
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const BarChartComponent = () => {
-  const { age, gender, dateRange, chartData, setChartData, setloading } = useContext(AppContext)
+  const { age, gender, dateRange, chartData, setChartData, setLoading } = useContext(AppContext)
 
   useEffect(() => {
     const fetchChartData = async () => {
       try {
         let sendData = { age, gender, dateRange }
-        let response = await fetch('https://chart-52w8.onrender.com/getchartdata', {
+        let response = await fetch(import.meta.env.VITE_BASE_URL+'/getchartdata', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -19,23 +19,23 @@ const BarChartComponent = () => {
 
         let data = await response.json()
         setChartData(data.result)
-        setloading(false)
+        setLoading(false)
       }
       catch (error) {
         console.log(error)
-        setloading(false)
+        setLoading(false)
       }
       finally {
-        setloading(false)
+        setLoading(false)
       }
     }
     fetchChartData()
   }, [age, gender, dateRange])
 
-
   return (
     chartData == null ? "Loading" : <ResponsiveContainer width={"100%"} height={300}>
       <BarChart
+        layout='vertical'
         data={chartData}
         margin={{
           top: 5,
@@ -45,28 +45,13 @@ const BarChartComponent = () => {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="Day" />
-        <YAxis />
+        <XAxis type='number'  />
+        <YAxis dataKey='name' type="category" />
         <Tooltip />
         <Bar
-          dataKey="A"
-          fill="#B3CDAD"
-          activeBar={<Rectangle fill="pink" stroke="blue" />}
-        />
-        <Bar
-          dataKey="B"
-          fill="#B3CDAD"
-          activeBar={<Rectangle fill="pink" stroke="blue" />}
-        />
-        <Bar
-          dataKey="C"
-          fill="#FF5F5E"
-          activeBar={<Rectangle fill="gold" stroke="purple" />}
-        />
-        <Bar
-          dataKey="D"
-          fill="orange"
-          activeBar={<Rectangle fill="gold" stroke="purple" />}
+          dataKey="value"
+          fill="#4472C4"
+          activeBar={<Rectangle fill="#C55A11" stroke="#4472C4" />}
         />
       </BarChart>
     </ResponsiveContainer>

@@ -4,7 +4,7 @@ import { AppContext } from '../context/AppContext';
 import Loader from "./Loader"
 
 const ProtectedRoute = () => {
-    const { isAuth, setIsAuth } = useContext(AppContext)
+    const { isAuth, setIsAuth,userDetails } = useContext(AppContext)
     const [isLoading, setIsLoading] = useState(true)
     useEffect(() => {
         const checkAuth = async () => {
@@ -16,7 +16,7 @@ const ProtectedRoute = () => {
                     return;
                 }
 
-                let response = await fetch('https://chart-52w8.onrender.com/checkauth', {
+                let response = await fetch(import.meta.env.VITE_BASE_URL+'/checkauth', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -27,7 +27,7 @@ const ProtectedRoute = () => {
                 setIsAuth(data.isAuth)
             }
             catch (error) {
-                onsole.error('Auth check failed:', error)
+                console.error('Auth check failed:', error)
                 setIsAuth(false)
             }
             finally {
@@ -35,11 +35,13 @@ const ProtectedRoute = () => {
             }
         }
         checkAuth()
+
     }, [])
 
     if (isLoading) {
         return <Loader/>
     }
+
 
     return isAuth ? <Outlet /> : <Navigate to="/login" />
 }

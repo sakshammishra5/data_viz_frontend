@@ -3,10 +3,11 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/api";
 import { AppContext } from "../context/AppContext";
+import Loader from "./Loader";
 
 
 function LoginPage() {
-  const { setIsAuth } = useContext(AppContext)
+  const { setIsAuth, setUserDetails } = useContext(AppContext)
   const navigate = useNavigate();
   const [loginData, setLoginData] = useState({
     username: "",
@@ -20,21 +21,37 @@ function LoginPage() {
   }
 
   const onSubmitHandler = async (e) => {
-    setLoading(true)
     e.preventDefault();
-    if (loginData.username && loginData.password) {
-      let data = await loginUser(loginData)
-      setLoading(false)
-      if (data.status === 200) {
-        let resData = await data.json()
-        if (resData.token) {
-          setIsAuth(true)
+    setLoading(true)
+    try {
+      if (loginData.username && loginData.password) {
+        let data = await loginUser(loginData)
+        setLoading(false)
+        if (data.status === 200) {
+          let resData = await data.json()
           localStorage.setItem("token", JSON.stringify(resData.token))
+          setUserDetails({ username: resData.username, userId: resData.userId })
+          setIsAuth(true)
           navigate("/");
         }
       }
     }
+
+    catch (error) {
+      setLoading(false)
+      console.error("Authentication failed:", error);
+      localStorage.removeItem("token");
+      console.log(error)
+    }
+    finally {
+      setLoading(false)
+    }
   }
+  
+  if (loading) {
+    return <Loader />
+  }
+
   return (
     <>
       <div className="flex h-dvh justify-center items-center">
@@ -62,5 +79,6 @@ function LoginPage() {
 
   );
 }
+
 
 export default LoginPage;

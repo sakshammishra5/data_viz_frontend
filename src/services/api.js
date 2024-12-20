@@ -1,4 +1,5 @@
 
+
 export const registerUser = (data) => {
     return fetch(import.meta.env.VITE_BASE_URL+'/register', {
         method: 'POST',
@@ -40,6 +41,4 @@ export const fetchChartData = async (age,gender,dateRange) => {
         },
         body: JSON.stringify(sendData)
     })
-    
-    console.log(data)
 }
