@@ -29,8 +29,6 @@ const FilterLayout = () => {
                 }),
                 credentials: "include",
             })
-            let res = await data.json()
-            console.log(res)
         }
 
         const getUserDetails = async () => {
