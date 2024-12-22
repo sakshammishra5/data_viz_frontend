@@ -15,7 +15,7 @@ const FilterLayout = () => {
         localStorage.clear('token')
         setIsAuth(false)
     }
-
+// change the filter
     useEffect(() => {
         const setFilter = async () => {
             let data = await fetch(import.meta.env.VITE_BASE_URL + '/setfilter', {
@@ -52,7 +52,7 @@ const FilterLayout = () => {
         return () => {
             setFilter()
         }
-    }, [userDetails])
+    }, [])
 
     useEffect(()=>{
         const filterCookie = Cookies.get("filters");
