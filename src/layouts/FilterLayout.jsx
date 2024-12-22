@@ -5,8 +5,7 @@ import AgeSelector from "../components/AgeSelector"
 import { Button } from 'flowbite-react';
 import { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
-import Cookies from 'js-cookie'
-import { parse } from 'dotenv';
+
 
 const FilterLayout = () => {
 
@@ -16,22 +15,8 @@ const FilterLayout = () => {
         localStorage.clear('token')
         setIsAuth(false)
     }
-// change the filter
-    useEffect(() => {
-        const setFilter = async () => {
-             await fetch(import.meta.env.VITE_BASE_URL + '/setfilter', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userId: userDetails.userId,
-                    filters: { age, gender, dateRange }
-                }),
-                credentials: "include",
-            })
-        }
 
+    useEffect(() => {
         const getUserDetails = async () => {
             const token = JSON.parse(localStorage.getItem('token'))
             let data = await fetch(import.meta.env.VITE_BASE_URL + '/checkauth', {
@@ -49,27 +34,27 @@ const FilterLayout = () => {
         if (isAuth && userDetails == null) {
             getUserDetails()
         }
+    }, [isAuth]); // Only run when auth state changes
 
-        return () => {
-            setFilter()
-        }
-    }, [userDetails])
+    // useEffect(() => {
+    //     const setFilter = async () => {
+    //         await fetch(import.meta.env.VITE_BASE_URL + '/setfilter', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 userId: userDetails.userId,
+    //                 filters: { age, gender, dateRange }
+    //             }),
+    //             credentials: "include",
+    //         })
+    //     }
 
-    useEffect(()=>{
-        const filterCookie = Cookies.get("filters");
-        if(filterCookie!==undefined){
-        const parsedFilter = JSON.parse(filterCookie);
-        }
-        if (parsedFilter!==undefined) {
-            try {
-                setAge(parsedFilter.filter.Age)
-                setGender(parsedFilter.filter.Gender)
-                setDateRange([new Date(parsedFilter.filter.DateRange[0]), new Date(parsedFilter.filter.DateRange[1])])
-            } catch (error) {
-                console.error("Error parsing cookie:", error);
-            }
-        }
-    },[])
+    //     if (userDetails?.userId) {
+    //         return ()=> {setFilter()}
+    //     }
+    // }, []);
 
     return (
         <>
