@@ -6,6 +6,7 @@ import { Button } from 'flowbite-react';
 import { useContext } from 'react';
 import { AppContext } from '../context/AppContext';
 import Cookies from 'js-cookie'
+import { parse } from 'dotenv';
 
 const FilterLayout = () => {
 
@@ -18,7 +19,7 @@ const FilterLayout = () => {
 // change the filter
     useEffect(() => {
         const setFilter = async () => {
-            let data = await fetch(import.meta.env.VITE_BASE_URL + '/setfilter', {
+             await fetch(import.meta.env.VITE_BASE_URL + '/setfilter', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,9 +57,10 @@ const FilterLayout = () => {
 
     useEffect(()=>{
         const filterCookie = Cookies.get("filters");
+        if(filterCookie!==undefined){
         const parsedFilter = JSON.parse(filterCookie);
-        console.log(filterCookie)
-        if (filterCookie) {
+        }
+        if (parsedFilter!==undefined) {
             try {
                 setAge(parsedFilter.filter.Age)
                 setGender(parsedFilter.filter.Gender)
