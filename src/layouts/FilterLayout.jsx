@@ -52,7 +52,7 @@ const FilterLayout = () => {
         return () => {
             setFilter()
         }
-    }, [])
+    }, [userDetails])
 
     useEffect(()=>{
         const filterCookie = Cookies.get("filters");
